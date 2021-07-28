@@ -12,5 +12,5 @@ else
   done
 fi
 echo "> new app deploy"
-nohup python3 start-gpu-mangaer.py &
+nohup python3 start-gpu-manager.py &
 sleep 3
