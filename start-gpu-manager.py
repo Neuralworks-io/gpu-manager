@@ -1,4 +1,4 @@
-from multiprocessing import Process
+import threading
 import requests
 import time
 import datetime
@@ -54,5 +54,5 @@ def work(url: str):
 if __name__ == '__main__':
     host_url = 'https://gpuismine.kro.kr'
 
-    Process(target=i_am_alive, args=(host_url,)).start()
-    Process(target=work, args=(host_url,)).start()
+    threading.Thread(target=i_am_alive, args=(host_url,)).start()
+    threading.Thread(target=work, args=(host_url,)).start()
