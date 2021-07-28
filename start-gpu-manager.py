@@ -5,8 +5,8 @@ import datetime
 import docker
 
 
-def i_am_alive(url: str):
-    health_check_url = url + '/api/workers/gpus/1/status'
+def i_am_alive(url: str, gpu_server_id: int):
+    health_check_url = url + '/api/workers/gpus/' + str(gpu_server_id) + '/status'
     worker_request = {'isOn': True, 'lastResponse': str(datetime.datetime.now().isoformat())}
 
     while True:
@@ -14,9 +14,9 @@ def i_am_alive(url: str):
         time.sleep(300)
 
 
-def work(url: str):
+def work(url: str, gpu_server_id: int):
     while True:
-        job_url = url + '/api/workers/gpus/1/job'
+        job_url = url + '/api/workers/gpus/' + str(gpu_server_id) + '/job'
         response = requests.get(job_url)
 
         if response.status_code != 200:
@@ -54,5 +54,5 @@ def work(url: str):
 if __name__ == '__main__':
     host_url = 'https://gpuismine.kro.kr'
 
-    Process(target=i_am_alive, args=(host_url,)).start()
-    Process(target=work, args=(host_url,)).start()
+    Process(target=i_am_alive, args=(host_url, 1)).start()
+    Process(target=work, args=(host_url, 1)).start()
