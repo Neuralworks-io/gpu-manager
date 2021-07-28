@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "test"
 echo "> now ing app pid find!"
 CURRENT_PIDS=$(pgrep -f start-gpu-manager.py)
 if [ -z "$CURRENT_PIDS" ]; then
