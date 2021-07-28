@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "> now ing app pid find!"
-CURRENT_PIDS=$(ps -ef | grep start-gpu-manager.py)
+CURRENT_PIDS=$(pgrep -f start-gpu-manager.py)
 if [ -z "$CURRENT_PIDS" ]; then
   echo "> no ing app."
 else
