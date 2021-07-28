@@ -6,7 +6,7 @@ import docker
 
 
 def i_am_alive(url: str):
-    health_check_url = url + '/api/workers/gpus/1/status'
+    health_check_url = url + '/api/workers/gpus/4/status'
     worker_request = {'isOn': True, 'lastResponse': str(datetime.datetime.now().isoformat())}
 
     while True:
