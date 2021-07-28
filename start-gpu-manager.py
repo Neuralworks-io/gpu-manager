@@ -56,5 +56,3 @@ if __name__ == '__main__':
 
     Process(target=i_am_alive, args=(host_url,)).start()
     Process(target=work, args=(host_url,)).start()
-
-# test
