@@ -20,7 +20,7 @@ def work(url: str):
         response = requests.get(job_url)
 
         if response.status_code != 200:
-            time.sleep(300)
+            time.sleep(10)
             continue
 
         job = response.json()
