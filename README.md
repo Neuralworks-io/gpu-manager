@@ -9,3 +9,4 @@ if __name__ == '__main__': 아래의 host_url을 변경할 수 있습니다.
 GPU Server당 2개의 Process를 만들어야 합니다.
 - i_am_alive를 실행하는 Process(health check)
 - work를 실행하는 Process(Job 처리)
+- 테스트
