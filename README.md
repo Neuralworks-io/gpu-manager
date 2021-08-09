@@ -16,4 +16,4 @@ GPU Server당 2개의 Process를 만들어야 합니다.
 logs에 메타 데이터를 남기기 위해 Low-level API 도입하게 됨.(Log에 tag 데이터를 넣어주기 위함)
 로그를 직접 보내주는 방식이 아닌 filebeat에서 이를 관리하도록 함. (docker container에서 발생한 log 데이터를 전달해주는 방식)
 
-/etc/filebeat/filebeat.yml 에서 설정 확인 할 수 있습니다. (elk 
+/etc/filebeat/filebeat.yml 에서 설정 확인 할 수 있습니다. (elk 레포지토리에서 확인 가능)
