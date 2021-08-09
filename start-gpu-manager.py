@@ -1,4 +1,5 @@
 from multiprocessing import Process
+from docker.types import LogConfig
 import requests
 import time
 import datetime
@@ -31,27 +32,35 @@ def work(url: str, gpu_server_id: int):
 
             worker_job_request = {'jobStatus': 'RUNNING'}
             running_status_url = url + '/api/workers/jobs/' + str(job['id']) + '/status'
-            print("이 주소로 요청을 보냅니다" + running_status_url)
+            print("이 주소로 요청을 보냅니다 - " + running_status_url)
             response = requests.put(running_status_url, json=worker_job_request)
             print("상태가 RUNNING 으로 변경되었습니다.")
 
             print("도커를 이미지를 빌드하는중입니다.")
-            client = docker.from_env()
-            image = client.images.pull("aprn7950/mnist_test_auto", tag="0.1")
-            container = client.containers.run(image, detach=True, auto_remove=True)
+
+            api_client = docker.APIClient(base_url='unix:///var/run/docker.sock')
+
+            lc = LogConfig(type=LogConfig.types.JSON, config={
+                "tag": str(job['id'])
+            })
+            hc = api_client.create_host_config(log_config=lc)
+            image_url = "aprn7950/mnist_test_100_auto"
+
+            api_client.pull(image_url)
+
+            container = api_client.create_container(image_url, detach=True,
+                                                    host_config=hc)
             print("도커이미지를 빌드했습니다.")
+            api_client.start(container=container.get('Id'))
+            print("Job 실행을 시작했습니다.")
+            api_client.wait(container)
+            print("Job 실행을 완료했습니다.")
 
-            log_url = url + '/api/workers/jobs/' + str(job['id']) + '/log'
-
-            for line in container.logs(stream=True):
-                # 현재 로그 전달
-                print(line.decode('utf-8'))
-                log = {'content': line.decode('utf-8')}
-                response = requests.post(log_url, json=log)
-            else:
-                worker_job_request = {'jobStatus': 'COMPLETED'}
-                complete_status_url = url + '/api/workers/jobs/' + str(job['id']) + '/status'
-                response = requests.put(complete_status_url, json=worker_job_request)
+            worker_job_request = {'jobStatus': 'COMPLETED'}
+            complete_status_url = url + '/api/workers/jobs/' + str(job['id']) + '/status'
+            print("이 주소로 완료 요청을 보냅니다 - " + running_status_url)
+            response = requests.put(complete_status_url, json=worker_job_request)
+            print("Job 상태 완료로 변경되었습니다.")
         except requests.exceptions.RequestException as e:
             continue
 
