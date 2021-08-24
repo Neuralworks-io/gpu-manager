@@ -67,6 +67,7 @@ def work(url: str, gpu_server_id: int):
 
 if __name__ == '__main__':
     host_url = 'https://gpuismine.kro.kr'
+    main_url = 'https://api.gpuismine.com'
 
     Process(target=i_am_alive, args=(host_url, 1)).start()
     Process(target=work, args=(host_url, 1)).start()
@@ -76,3 +77,12 @@ if __name__ == '__main__':
 
     Process(target=i_am_alive, args=(host_url, 3)).start()
     Process(target=work, args=(host_url, 3)).start()
+
+    Process(target=i_am_alive, args=(main_url, 1)).start()
+    Process(target=work, args=(main_url, 1)).start()
+
+    Process(target=i_am_alive, args=(main_url, 2)).start()
+    Process(target=work, args=(main_url, 2)).start()
+
+    Process(target=i_am_alive, args=(main_url, 3)).start()
+    Process(target=work, args=(main_url, 3)).start()
