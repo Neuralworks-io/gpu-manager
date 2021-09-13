@@ -65,6 +65,7 @@ def work(url: str, gpu_server_id: int):
             response = requests.put(complete_status_url, json=worker_job_request)
             print("Job 상태 완료로 변경되었습니다.")
         except requests.exceptions.RequestException as e:
+            print(f"Running Exception!{e}")
             continue
 
 
