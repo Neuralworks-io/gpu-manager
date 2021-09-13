@@ -1,9 +1,10 @@
-from multiprocessing import Process
-from docker.types import LogConfig
-import requests
-import time
 import datetime
+import time
+from multiprocessing import Process
+
 import docker
+import requests
+from docker.types import LogConfig
 
 
 def i_am_alive(url: str, gpu_server_id: int):
@@ -12,6 +13,7 @@ def i_am_alive(url: str, gpu_server_id: int):
             health_check_url = url + '/api/workers/gpus/' + str(gpu_server_id) + '/status'
             worker_request = {'isOn': True, 'lastResponse': str(datetime.datetime.now().isoformat())}
             response = requests.put(health_check_url, json=worker_request)
+            print(response)
             time.sleep(10)
         except requests.exceptions.RequestException as e:
             continue
@@ -29,7 +31,9 @@ def work(url: str, gpu_server_id: int):
 
             job = response.json()
             print("가져온 작업입니다" + str(job))
+            print(f"가져온 작업의 url입니다{job['metaData']}")
 
+            image_url = job['metaData']
             worker_job_request = {'jobStatus': 'RUNNING'}
             running_status_url = url + '/api/workers/jobs/' + str(job['id']) + '/status'
             print("이 주소로 요청을 보냅니다 - " + running_status_url)
@@ -44,7 +48,6 @@ def work(url: str, gpu_server_id: int):
                 "tag": str(job['id'])
             })
             hc = api_client.create_host_config(log_config=lc)
-            image_url = "aprn7950/mnist_test_100_auto"
 
             api_client.pull(image_url)
 
