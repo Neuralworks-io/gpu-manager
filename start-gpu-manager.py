@@ -66,11 +66,13 @@ def work(url: str, gpu_server_id: int):
             print("Job 상태 완료로 변경되었습니다.")
         except requests.exceptions.RequestException as e:
             print(f"Running Exception!{e}")
-            continue
+            worker_job_request = {'jobStatus': 'CANCLED'}
+            complete_status_url = url + '/api/workers/jobs/' + str(job['id']) + '/status'
 
 
 if __name__ == '__main__':
-    host_url = 'https://gpuismine.kro.kr'
+    # host_url = 'https://api.gpuismine.com' main
+    host_url = 'https://dev-api.gpuismine.com'  # dev
 
     Process(target=i_am_alive, args=(host_url, 1)).start()
     Process(target=work, args=(host_url, 1)).start()
