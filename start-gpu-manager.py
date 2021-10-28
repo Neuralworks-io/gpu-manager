@@ -51,8 +51,7 @@ def work(url: str, gpu_server_id: int):
 
             api_client.pull(image_url)
 
-            container = api_client.create_container(image_url, detach=True,
-                                                    host_config=hc)
+            container = api_client.create_container(image_url, detach=True, host_config=hc)
             print("도커이미지를 빌드했습니다.")
             api_client.start(container=container.get('Id'))
             print("Job 실행을 시작했습니다.")
@@ -66,8 +65,10 @@ def work(url: str, gpu_server_id: int):
             print("Job 상태 완료로 변경되었습니다.")
         except requests.exceptions.RequestException as e:
             print(f"Running Exception!{e}")
-            worker_job_request = {'jobStatus': 'CANCLED'}
+            worker_job_request = {'jobStatus': 'FAILED'}
             complete_status_url = url + '/api/workers/jobs/' + str(job['id']) + '/status'
+            response = requests.put(complete_status_url, json=worker_job_request)
+            print("Job이 취소상태로 변경되었습니다.")
 
 
 if __name__ == '__main__':
