@@ -13,7 +13,7 @@ def i_am_alive(url: str, gpu_server_id: int):
             health_check_url = url + '/api/workers/gpus/' + str(gpu_server_id) + '/status'
             worker_request = {'isOn': True, 'lastResponse': str(datetime.datetime.now().isoformat())}
             response = requests.put(health_check_url, json=worker_request)
-            print(response)
+            # print(response)
             time.sleep(10)
         except requests.exceptions.RequestException as e:
             continue
